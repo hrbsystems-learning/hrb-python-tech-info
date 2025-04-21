@@ -302,6 +302,38 @@ python3 -m pipx ensurepath
 While you *could* technically run `pip install pipx` *inside* an active Conda environment, it's generally recommended to install `pipx` outside of your specific project Conda environments so that it acts as a global tool manager for your user account.  
 
 ---  
+So, when we install uv inside a conda virtual env,  we also have an uvx cli installed into the conda env. Correct?   
+
+Yes, that is **correct**.
+
+When you are inside an active Conda virtual environment and run:
+
+```bash
+python -m pip install uv
+```
+
+or
+
+```bash
+pip install uv
+```
+
+The `pip` installer will install the `uv` package into that specific Conda environment's `site-packages` directory. As part of the `uv` package definition, it declares both `uv` and `uvx` as console script entry points.
+
+`pip` then creates executable wrappers (small scripts) for both `uv` and `uvx` and places them inside the Conda environment's executable directory (`bin/` on Linux/macOS, `Scripts\` on Windows).
+
+Because activating the Conda environment (`conda activate <env_name>`) adds this specific directory to the beginning of your system's `PATH`, both the `uv` and `uvx` commands become directly available on your command line **as long as that Conda environment is active.**
+
+So, after installation within the environment:
+
+*   Running `uv --version` will execute the `uv` tool installed in that environment.
+*   Running `uvx --help` will execute the `uvx` tool installed in that same environment.
+
+This is different from `pipx`, which is typically installed *outside* specific project environments to manage tools globally for your user. `uv` and `uvx`, when installed this way, are scoped to the specific Conda environment you installed them into.  
+
+---  
+
+
 
 
 
